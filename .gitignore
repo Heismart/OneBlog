@@ -25,3 +25,7 @@ hs_err_pid*
 /logdir_IS_UNDEFINED/
 /blog-codegen/generator-output/
 */target/
+.gitignore
+.DS_Store
+**/.DS_Store
+

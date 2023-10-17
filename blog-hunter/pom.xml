@@ -3,6 +3,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
+    <packaging>jar</packaging>
     <parent>
         <groupId>com.zyd</groupId>
         <artifactId>blog</artifactId>
@@ -11,10 +13,23 @@
 
     <artifactId>blog-hunter</artifactId>
 
+    <name>blog-hunter</name>
+    <description>博客猎手，基于webMagic的博客爬取工具，支持慕课、csdn、iteye、cnblogs、掘金、V2EX 和开源中国等各大主流博客平台。博客千万篇，版权第一条。狩猎不规范，亲人两行泪。</description>
+
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>us.codecraft</groupId>
+            <artifactId>webmagic-core</artifactId>
+            <version>${webmagic.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

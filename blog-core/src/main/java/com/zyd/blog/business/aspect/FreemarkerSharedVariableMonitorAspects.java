@@ -28,8 +28,8 @@ import java.util.Map;
 @Order(1)
 public class FreemarkerSharedVariableMonitorAspects {
 
-//    private static volatile long configLastUpdateTime = 0L;
-    private ThreadLocal<Long> configLastUpdateTime = new ThreadLocal<>();
+    private static volatile long configLastUpdateTime = 0L;
+//    private ThreadLocal<Long> configLastUpdateTime = new ThreadLocal<>();
     @Autowired
     protected freemarker.template.Configuration configuration;
     @Autowired
@@ -50,8 +50,8 @@ public class FreemarkerSharedVariableMonitorAspects {
         }
 
         long updateTime = ((Date) config.get(ConfigKeyEnum.UPDATE_TIME.getKey())).getTime();
-//        if (updateTime == configLastUpdateTime) {
-            if ( updateTime == configLastUpdateTime.get()){
+        if (updateTime == configLastUpdateTime) {
+//            if ( updateTime == configLastUpdateTime.get()){
             log.debug("config表未更新");
             return;
         }
