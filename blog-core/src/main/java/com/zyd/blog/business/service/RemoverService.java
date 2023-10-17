@@ -1,6 +1,6 @@
 package com.zyd.blog.business.service;
 
-import me.zhyd.hunter.config.HunterConfig;
+import com.zyd.hunter.config.HunterConfig;
 
 import java.io.PrintWriter;
 

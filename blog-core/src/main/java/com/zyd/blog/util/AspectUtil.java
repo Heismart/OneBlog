@@ -31,17 +31,20 @@ public enum AspectUtil {
      * @param prefix key前缀 （非必选）
      * @throws NoSuchMethodException
      */
-    public String getKey(JoinPoint point, String extra, String prefix) throws NoSuchMethodException {
-        Method currentMethod = this.getMethod(point);
-        if (null == currentMethod) {
+    public String getKey(JoinPoint point, String extra, String prefix) throws ZhydException {
+
+        try{
+            Method currentMethod = this.getMethod(point);
+            String methodName = currentMethod.getName();
+            return getKey(point, prefix) +
+                    "_" +
+                    methodName +
+                    CacheKeyUtil.getMethodParamsKey(point.getArgs()) +
+                    (null == extra ? "" : extra);
+        }catch (NoSuchMethodException noSuchMethodException){
             throw new ZhydException("Invalid operation! Method not found.");
         }
-        String methodName = currentMethod.getName();
-        return getKey(point, prefix) +
-                "_" +
-                methodName +
-                CacheKeyUtil.getMethodParamsKey(point.getArgs()) +
-                (null == extra ? "" : extra);
+
     }
 
     /**
@@ -64,7 +67,7 @@ public enum AspectUtil {
      * @param point 当前切面执行的方法
      */
     public String getClassName(JoinPoint point) {
-        return point.getTarget().getClass().getName().replaceAll("\\.", "_");
+        return point.getTarget().getClass().getName().replace("\\.", "_");
     }
 
     /**
@@ -74,9 +77,9 @@ public enum AspectUtil {
      */
     public Method getMethod(JoinPoint point) throws NoSuchMethodException {
         Signature sig = point.getSignature();
-        MethodSignature msig = (MethodSignature) sig;
+        MethodSignature mSig = (MethodSignature) sig;
         Object target = point.getTarget();
-        return target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
+        return target.getClass().getMethod(mSig.getName(), mSig.getParameterTypes());
     }
 
     public String parseParams(Object[] params, String bussinessName) {

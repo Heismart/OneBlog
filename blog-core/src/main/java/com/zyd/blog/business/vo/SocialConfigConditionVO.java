@@ -1,7 +1,6 @@
 package com.zyd.blog.business.vo;
 
 import com.zyd.blog.framework.object.BaseConditionVO;
-import com.zyd.blog.business.entity.SocialConfig;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

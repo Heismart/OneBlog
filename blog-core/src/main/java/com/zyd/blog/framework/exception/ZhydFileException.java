@@ -8,14 +8,6 @@ package com.zyd.blog.framework.exception;
  * @since 1.0
  */
 public class ZhydFileException extends ZhydException {
-    /**
-     * Constructs a new runtime exception with {@code null} as its
-     * detail message.  The cause is not initialized, and may subsequently be
-     * initialized by a call to {@link #initCause}.
-     */
-    public ZhydFileException() {
-        super();
-    }
 
     /**
      * Constructs a new runtime exception with the specified detail message.

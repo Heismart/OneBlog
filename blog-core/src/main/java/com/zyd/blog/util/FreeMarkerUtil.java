@@ -4,6 +4,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
@@ -11,7 +12,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Freemarker模板操作工具类
@@ -24,7 +25,7 @@ import java.util.Set;
  */
 @Slf4j
 public class FreeMarkerUtil {
-
+    private FreeMarkerUtil(){}
     private static final String LT = "<";
     private static final String LT_CHAR = "&lt;";
     private static final String GT = ">";
@@ -53,31 +54,46 @@ public class FreeMarkerUtil {
         }
         Map<String, Object> newMap = new HashMap<>(1);
 
-        Set<String> keySet = map.keySet();
-        if (keySet.size() > 0) {
-            for (String key : keySet) {
-                Object o = map.get(key);
-                if (o != null) {
-                    if (o instanceof String) {
-                        String value = o.toString();
-                        value = value.trim();
-                        if (isNeedFilter) {
-                            value = filterXmlString(value);
+//        Set<String> keySet = map.keySet();
+//        if (!keySet.isEmpty()) {
+//            for (String key : keySet) {
+//                Object o = map.get(key);
+//                if (o != null) { // 过滤空值
+//                    if (o instanceof String) {
+//                        String value = o.toString();
+//                        value = value.trim();
+//                        if (isNeedFilter) {
+//                            value = filterXmlString(value);
+//                        }
+//                        newMap.put(key, value);
+//                    } else {
+//                        newMap.put(key, o);
+//                    }
+//                }
+//            }
+//        }
+        if(!map.isEmpty()){
+           newMap= map.entrySet().stream()
+                    .filter(entry -> !ObjectUtils.isEmpty(entry.getValue()))
+                    .map(entry -> {
+                        if(entry.getValue() instanceof String){
+                            String strValue=entry.getValue().toString();
+                            strValue = strValue.trim();
+                            if (isNeedFilter){
+                                strValue= filterXmlString(strValue);
+                            }
+                            entry.setValue(strValue);
                         }
-                        newMap.put(key, value);
-                    } else {
-                        newMap.put(key, o);
-                    }
-                }
-            }
+                        return entry;
+                    }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         }
+
         Template t = null;
-        try {
+        try(StringWriter writer = new StringWriter()) {
             // 设定freemarker对数值的格式化
             Configuration cfg = new Configuration(Configuration.VERSION_2_3_22);
             cfg.setNumberFormat("#");
             t = new Template("", new StringReader(templateContent), cfg);
-            StringWriter writer = new StringWriter();
             t.process(newMap, writer);
             return writer.toString();
         } catch (IOException e) {
@@ -95,11 +111,11 @@ public class FreeMarkerUtil {
         if (null == str) {
             return null;
         }
-        str = str.replaceAll(LT, LT_CHAR);
-        str = str.replaceAll(GT, GT_CHAR);
-        str = str.replaceAll(AMP, AMP_CHAR);
-        str = str.replaceAll(APOS, APOS_CHAR);
-        str = str.replaceAll(QUOT, QUOT_CHAR);
+        str = str.replace(LT, LT_CHAR);
+        str = str.replace(GT, GT_CHAR);
+        str = str.replace(AMP, AMP_CHAR);
+        str = str.replace(APOS, APOS_CHAR);
+        str = str.replace(QUOT, QUOT_CHAR);
         return str;
     }
 }

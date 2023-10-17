@@ -3,7 +3,7 @@ package com.zyd.blog.runner;
 import cn.hutool.core.thread.ThreadFactoryBuilder;
 import com.xkcoding.http.HttpUtil;
 import com.xkcoding.http.support.hutool.HutoolImpl;
-import com.zyd.blog.core.schedule.ArticleLookTask;
+import com.zyd.blog.admin.core.schedule.ArticleLookTask;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -35,7 +35,7 @@ public class AppRunner implements ApplicationRunner {
 
         ExecutorService singleThreadPool = new ThreadPoolExecutor(1, 1,
                 3650L, TimeUnit.DAYS,
-                new LinkedBlockingQueue<Runnable>(1024),
+                new LinkedBlockingQueue<>(1024),
                 articleLookThreadFactory, new ThreadPoolExecutor.AbortPolicy());
 
         singleThreadPool.execute(() -> articleLookTask.save());

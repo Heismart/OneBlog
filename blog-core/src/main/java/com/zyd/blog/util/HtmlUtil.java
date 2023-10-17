@@ -2,7 +2,6 @@ package com.zyd.blog.util;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.util.StringUtils;
 
 import java.util.regex.Matcher;
@@ -16,7 +15,7 @@ import java.util.regex.Pattern;
  * @since 1.0
  */
 public class HtmlUtil {
-
+    private HtmlUtil(){}
     /**
      * 获取Element
      *
@@ -42,19 +41,20 @@ public class HtmlUtil {
             return "";
         }
         // 定义HTML标签的正则表达式
-        String regEx_html = "<[^>]+>";
-        content = content.replaceAll(regEx_html, "").replaceAll(" ", "");
-        content = content.replaceAll("&quot;", "\"")
-                .replaceAll("&nbsp;", "")
-                .replaceAll("&amp;", "&")
-                .replaceAll("\n", " ")
-                .replaceAll("&#39;", "\'")
-                .replaceAll("&lt;", "<")
-                .replaceAll("&gt;", ">")
-                .replaceAll("javascript:", "")
-                .replaceAll("[ \\f\\t\\v]{2,}", "\t");
+        String regExHtml = "<[^>]+>";
+        content = content.replace(regExHtml, "").replace(" ", "");
+        content = content.replace("&quot;", "\"")
+                .replace("&nbsp;", "")
+                .replace("&amp;", "&")
+                .replace("\n", " ")
+                .replace("&#39;", "\'")
+                .replace("&lt;", "<")
+                .replace("&gt;", ">")
+                .replace("javascript:", "")
+                .replace("[ \\f\\t\\v]{2,}", "\t");
 
-        String regEx = "<.+?>";
+//        String regEx = "<.+?>";
+        String regEx = "<[^>]++>";
         Pattern pattern = Pattern.compile(regEx);
         Matcher matcher = pattern.matcher(content);
         content = matcher.replaceAll("");

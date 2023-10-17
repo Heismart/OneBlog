@@ -28,7 +28,8 @@ import java.util.Map;
 @Order(1)
 public class FreemarkerSharedVariableMonitorAspects {
 
-    private static volatile long configLastUpdateTime = 0L;
+//    private static volatile long configLastUpdateTime = 0L;
+    private ThreadLocal<Long> configLastUpdateTime = new ThreadLocal<>();
     @Autowired
     protected freemarker.template.Configuration configuration;
     @Autowired
@@ -42,13 +43,15 @@ public class FreemarkerSharedVariableMonitorAspects {
 
     @After("pointcut()")
     public void after(JoinPoint joinPoint) {
-        Map config = configService.getConfigs();
+        Map<String,Object> config = configService.getConfigs();
         if (null == config) {
             log.error("config为空");
             return;
         }
-        Long updateTime = ((Date) config.get(ConfigKeyEnum.UPDATE_TIME.getKey())).getTime();
-        if (updateTime == configLastUpdateTime) {
+
+        long updateTime = ((Date) config.get(ConfigKeyEnum.UPDATE_TIME.getKey())).getTime();
+//        if (updateTime == configLastUpdateTime) {
+            if ( updateTime == configLastUpdateTime.get()){
             log.debug("config表未更新");
             return;
         }
@@ -57,7 +60,7 @@ public class FreemarkerSharedVariableMonitorAspects {
         try {
             configuration.setSharedVariable("config", config);
         } catch (TemplateModelException e) {
-            e.printStackTrace();
+            log.error("重新加载config到shared variabler 失败！",e);
         }
     }
 }

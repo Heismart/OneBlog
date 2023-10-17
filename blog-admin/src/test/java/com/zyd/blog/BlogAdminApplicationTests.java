@@ -21,7 +21,7 @@ public class BlogAdminApplicationTests {
     public void uploadFile() {
         FileUploader uploader = new GlobalFileUploader();
         File file = new File("C:\\Users\\yadon\\Desktop\\新建文件夹\\web-index-pc.png");
-        VirtualFile virtualFile = uploader.upload(file, FileUploadType.SIMPLE.getPath(), true);
+        VirtualFile virtualFile = uploader.upload(file, FileUploadType.ARTICLE.getPath(), true);
         System.out.println(virtualFile);
     }
 }

@@ -1,10 +1,11 @@
 package com.zyd.blog.file;
 
+import cn.hutool.core.io.FileUtil;
 import com.zyd.blog.file.alioss.api.OssApi;
 import com.zyd.blog.file.entity.VirtualFile;
 import com.zyd.blog.file.exception.OssApiException;
-import com.zyd.blog.file.util.FileUtil;
-import com.zyd.blog.file.util.StreamUtil;
+import com.zyd.blog.file.util.BlogFileUtil;
+import com.zyd.blog.file.util.BlogStreamUtil;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
@@ -43,11 +44,11 @@ public class AliyunOssApiClient extends BaseApiClient {
     public VirtualFile uploadImg(InputStream is, String imageUrl) {
         this.check();
 
-        String key = FileUtil.generateTempFileName(imageUrl);
+        String key = BlogFileUtil.generateTempFileName(imageUrl);
         this.createNewFileName(key, this.pathPrefix);
         Date startTime = new Date();
-        try (InputStream uploadIs = StreamUtil.clone(is);
-             InputStream fileHashIs = StreamUtil.clone(is)) {
+        try (InputStream uploadIs = BlogStreamUtil.clone(is);
+             InputStream fileHashIs = BlogStreamUtil.clone(is)) {
             ossApi.uploadFile(uploadIs, this.newFileName, bucketName);
             return new VirtualFile()
                     .setOriginalFileName(FileUtil.getName(key))

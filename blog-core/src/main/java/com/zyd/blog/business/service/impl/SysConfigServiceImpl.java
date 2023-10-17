@@ -3,7 +3,7 @@ package com.zyd.blog.business.service.impl;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSON;
 import com.zyd.blog.business.annotation.RedisCache;
 import com.zyd.blog.business.consts.DateConst;
 import com.zyd.blog.business.enums.ConfigKeyEnum;
@@ -61,8 +61,8 @@ public class SysConfigServiceImpl implements SysConfigService {
         }
         String updateTimeKey = ConfigKeyEnum.UPDATE_TIME.getKey();
         Map<String, Object> res = new HashMap<>();
-        res.put(updateTimeKey, DateUtil.parse("2019-01-01 00:00:00", DateConst.YYYY_MM_DD_HH_MM_SS_EN));
-        list.forEach((sysConfig) -> {
+        res.put(updateTimeKey, DateUtil.parse("2023-10-01 00:00:00", DateConst.YYYY_MM_DD_HH_MM_SS_EN));
+        list.forEach(sysConfig -> {
             res.put(String.valueOf(sysConfig.getConfigKey()), sysConfig.getConfigValue());
             if (sysConfig.getUpdateTime().after(((Date) res.get(updateTimeKey)))) {
                 res.put(updateTimeKey, sysConfig.getUpdateTime());
@@ -178,7 +178,7 @@ public class SysConfigServiceImpl implements SysConfigService {
             return null;
         }
         try {
-            return JSONArray.parseArray(config.getConfigValue(), String.class);
+            return JSON.parseArray(config.getConfigValue(), String.class);
         } catch (Exception e) {
             log.error("配置项无效！defaultUserAvatar = [" + config.getConfigValue() + "]");
         }

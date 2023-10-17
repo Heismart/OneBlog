@@ -1,6 +1,5 @@
 <#-- 公共顶部 -->
-<#macro header title="OneBlog开源博客" keywords="" description="" canonical="" hasEditor=false>
-<#include "/common/annotation.ftl">
+<#macro header title="IGrok·Blog" keywords="IGrok,Blog,Java,Javascript,Typescript,React,Vue,SSM,Springboot,Shiro,JPA,Mybatis,Freemark,Thymeleaf,H2,SQLite3,MySQL,Oracle,MongoDB,Elasticsearch,Openshift,K8s,Kubernetes,Docker,Container" description="IGrok·Blog，一群资深项目管理者和开发者共聚在一起，专注于知识分享、升华、传承。以前端、后端、数据、容器计算等技术专题为内容组织主线，涵盖主流敏捷开发所需的主要基础知识讲解及应用实例示范，贯彻用实践驱动学习和成长，精准掌握知识关键，高效运用到实际工作中去。" canonical="" hasEditor=false>
 <!DOCTYPE HTML>
 <html lang="zh-CN">
 <head>

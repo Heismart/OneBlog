@@ -1,5 +1,6 @@
 package com.zyd.blog.business.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -34,6 +35,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.security.SecureRandom;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -62,6 +64,7 @@ public class BizCommentServiceImpl implements BizCommentService {
     @Autowired
     private SysConfigService configService;
 
+    private static final Random sRandom = new SecureRandom();
     /**
      * 分页查询
      *
@@ -123,7 +126,7 @@ public class BizCommentServiceImpl implements BizCommentService {
     @Override
     @RedisCache(flush = true)
     public void commentForAdmin(Comment comment) throws ZhydCommentException {
-        Map config = configService.getConfigs();
+        Map<String,Object> config = configService.getConfigs();
         User user = SessionUtil.getUser();
         comment.setQq(user.getQq());
         comment.setEmail(user.getEmail());
@@ -172,7 +175,7 @@ public class BizCommentServiceImpl implements BizCommentService {
             List<String> avatars = configService.getRandomUserAvatar();
             if (!CollectionUtils.isEmpty(avatars)) {
                 Collections.shuffle(avatars);
-                int randomIndex = new Random().nextInt(avatars.size());
+                int randomIndex = sRandom.nextInt(avatars.size());
                 comment.setAvatar(avatars.get(randomIndex));
             }
         }
@@ -280,10 +283,10 @@ public class BizCommentServiceImpl implements BizCommentService {
      * @param comment
      */
     private void setCurrentLocation(Comment comment) {
-        Map config = configService.getConfigs();
+        Map<String,Object> config = configService.getConfigs();
         try {
             String locationJson = RestClientUtil.get(UrlBuildUtil.getLocationByIp(comment.getIp(), (String) config.get(ConfigKeyEnum.BAIDU_API_AK.getKey())));
-            JSONObject localtionContent = JSONObject.parseObject(locationJson).getJSONObject("content");
+            JSONObject localtionContent = JSON.parseObject(locationJson).getJSONObject("content");
             if (localtionContent.containsKey("point")) {
                 JSONObject point = localtionContent.getJSONObject("point");
                 comment.setLat(point.getString("y"));

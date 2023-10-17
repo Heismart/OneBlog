@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * @since 1.0
  */
 public class BeanConvertUtil {
-
+private BeanConvertUtil(){}
     /**
      * sourceList --> targetList 转换
      *
@@ -37,7 +37,7 @@ public class BeanConvertUtil {
         if (CollectionUtils.isEmpty(sourceArray) || null == target) {
             return null;
         }
-        return sourceArray.stream().map((bo) -> doConvert(bo, target)).collect(Collectors.toList());
+        return sourceArray.stream().map(bo -> doConvert(bo, target)).collect(Collectors.toList());
     }
 
     /**

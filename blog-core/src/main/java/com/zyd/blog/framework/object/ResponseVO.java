@@ -1,13 +1,12 @@
 package com.zyd.blog.framework.object;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.zyd.blog.business.enums.ResponseStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * controller返回json
@@ -37,10 +36,10 @@ public class ResponseVO<T> {
 
     public String toJson() {
         T t = this.getData();
-        if (t instanceof List || t instanceof Collection) {
-            return JSONObject.toJSONString(this, SerializerFeature.WriteNullListAsEmpty);
+        if (t instanceof Collection) {
+            return JSON.toJSONString(this, SerializerFeature.WriteNullListAsEmpty);
         } else {
-            return JSONObject.toJSONString(this, SerializerFeature.WriteMapNullValue);
+            return JSON.toJSONString(this, SerializerFeature.WriteMapNullValue);
         }
     }
 }

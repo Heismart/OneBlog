@@ -16,7 +16,6 @@ import com.zyd.blog.framework.holder.SpringContextHolder;
 import com.zyd.blog.persistence.beans.BizFile;
 import com.zyd.blog.util.BeanConvertUtil;
 import com.zyd.blog.util.SessionUtil;
-import org.springframework.util.StringUtils;
 
 import java.util.Map;
 
@@ -32,11 +31,10 @@ public class BaseFileUploader {
     ApiClient getApiClient(String uploadType) {
         SysConfigService configService = SpringContextHolder.getBean(SysConfigService.class);
         Map<String, Object> config = configService.getConfigs();
-        String storageType = null;
-        if (null == config || StringUtils.isEmpty((storageType = (String) config.get(ConfigKeyEnum.STORAGE_TYPE.getKey())))) {
+        String storageType;
+        if (null == config || null == (storageType=(String) config.getOrDefault(ConfigKeyEnum.STORAGE_TYPE.getKey(),null))) {
             throw new ZhydException("[文件服务]当前系统暂未配置文件服务相关的内容！");
         }
-
         ApiClient res = null;
         switch (storageType) {
             case "local":

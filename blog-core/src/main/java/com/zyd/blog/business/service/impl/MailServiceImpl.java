@@ -73,7 +73,7 @@ public class MailServiceImpl implements MailService {
     @Async
     public void send(Link link, TemplateKeyEnum keyEnum) {
         if (!StringUtils.isEmpty(link.getEmail())) {
-            Map config = configService.getConfigs();
+            Map<String,Object> config = configService.getConfigs();
             Template template = templateService.getTemplate(keyEnum);
             String temXml = template.getRefValue();
             Map<String, Object> map = new HashMap<>(2);
@@ -102,7 +102,7 @@ public class MailServiceImpl implements MailService {
             this.sendToAdmin(comment);
             return;
         }
-        Map config = configService.getConfigs();
+        Map<String,Object> config = configService.getConfigs();
         Template template = templateService.getTemplate(keyEnum);
         String temXml = template.getRefValue();
         Map<String, Object> map = new HashMap<>(2);
@@ -128,7 +128,7 @@ public class MailServiceImpl implements MailService {
     @Override
     @Async
     public void sendToAdmin(Link link) {
-        Map config = configService.getConfigs();
+        Map<String,Object> config = configService.getConfigs();
         Template template = templateService.getTemplate(TemplateKeyEnum.TM_LINKS_TO_ADMIN);
         String temXml = template.getRefValue();
         Map<String, Object> map = new HashMap<>(1);
@@ -152,7 +152,7 @@ public class MailServiceImpl implements MailService {
     @Override
     @Async
     public void sendToAdmin(Comment comment) {
-        Map config = configService.getConfigs();
+        Map<String,Object> config = configService.getConfigs();
         Template template = templateService.getTemplate(TemplateKeyEnum.TM_NEW_COMMENT);
         String temXml = template.getRefValue();
         Map<String, Object> map = new HashMap<>(2);

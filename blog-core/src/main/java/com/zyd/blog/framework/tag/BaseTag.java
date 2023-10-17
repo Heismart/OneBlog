@@ -1,15 +1,7 @@
 package com.zyd.blog.framework.tag;
 
 import freemarker.core.Environment;
-import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.DefaultObjectWrapperBuilder;
-import freemarker.template.SimpleScalar;
-import freemarker.template.TemplateDirectiveBody;
-import freemarker.template.TemplateDirectiveModel;
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
+import freemarker.template.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -34,7 +26,7 @@ public abstract class BaseTag implements TemplateDirectiveModel {
     private static final ConcurrentHashMap<String, Class> classBucket = new ConcurrentHashMap<>();
     private String clazzPath = null;
 
-    public BaseTag(String targetClassPath) {
+    protected BaseTag(String targetClassPath) {
         clazzPath = targetClassPath;
         if (classBucket.get(clazzPath) == null) {
             try {

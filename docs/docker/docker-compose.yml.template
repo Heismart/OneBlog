@@ -1,6 +1,6 @@
 # 使用构建好的镜像运行
 # 官方稳定版
-version: '3.3'
+version: '3.7'
 services:
 
   # Redis
@@ -23,7 +23,7 @@ services:
 
   # MySQL
   blog-mysql:
-    image: justauth/blog-mysql
+    image: luogenji/blog-mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${ONEBLOG_DATASOURCE_PASSWORD}
       TZ: Asia/Shanghai
@@ -44,7 +44,7 @@ services:
 
   # admin 服务
   blog-admin:
-    image: justauth/blog-admin
+    image: luogenji/blog-admin
     restart: always
     container_name: blog-admin
     hostname: blog-admin
@@ -61,13 +61,13 @@ services:
       - blog-redis
       - blog-mysql
     ports:
-      - ${ONEBLOG_EXPORT_PORT_ADMIN}:8085
+      - ${ONEBLOG_EXPORT_PORT_ADMIN}:8081
     networks:
       - oneblog
 
   # admin 服务
   blog-web:
-    image: justauth/blog-web
+    image: luogenji/blog-web
     restart: always
     container_name: blog-web
     hostname: blog-web
@@ -84,7 +84,7 @@ services:
       - blog-redis
       - blog-mysql
     ports:
-      - ${ONEBLOG_EXPORT_PORT_WEB}:8443
+      - ${ONEBLOG_EXPORT_PORT_WEB}:8080
     networks:
       - oneblog
 

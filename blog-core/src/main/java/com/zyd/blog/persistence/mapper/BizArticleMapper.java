@@ -5,7 +5,6 @@ import com.zyd.blog.persistence.beans.BizArticle;
 import com.zyd.blog.plugin.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;

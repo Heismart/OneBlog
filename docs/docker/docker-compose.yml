@@ -1,17 +1,18 @@
 # 通过本地编译的形式运行
 # 可以随时修改源代码后 repackage 然后重新构建本地镜像
-version: '3.3'
+version: '3.7'
 services:
 
   # Redis
   blog-redis:
     image: redis
+    platform: linux/amd64
     restart: always
     container_name: blog-redis
     hostname: blog-redis
     command: redis-server --appendonly yes --requirepass ${ONEBLOG_REDIS_PASSWORD} --bind blog-redis
     ports:
-      - 63799:6379
+      - ${ONEBLOG_EXPORT_PORT_REDIS}:6379
     volumes:
       - ${ONEBLOG_APP_DIR}/redis/:/data/
     healthcheck:
@@ -23,7 +24,8 @@ services:
 
   # MySQL
   blog-mysql:
-    image: justauth/blog-mysql
+    image: luogenji/blog-mysql
+    platform: linux/amd64
     build: ./mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${ONEBLOG_DATASOURCE_PASSWORD}
@@ -34,7 +36,7 @@ services:
     volumes:
       - ${ONEBLOG_APP_DIR}/mysql:/var/lib/mysql
     ports:
-      - 33066:3306
+      - ${ONEBLOG_EXPORT_PORT_MYSQL}:3306
     command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
@@ -45,7 +47,8 @@ services:
 
   # admin 服务
   blog-admin:
-    image: justauth/blog-admin
+    image: luogenji/blog-admin
+    platform: linux/amd64
     build: ../../blog-admin
     restart: always
     container_name: blog-admin
@@ -63,13 +66,14 @@ services:
       - blog-redis
       - blog-mysql
     ports:
-      - 8085:8085
+      - ${ONEBLOG_EXPORT_PORT_ADMIN}:8081
     networks:
       - oneblog
 
   # admin 服务
   blog-web:
-    image: justauth/blog-web
+    image: luogenji/blog-web
+    platform: linux/amd64
     build: ../../blog-web
     restart: always
     container_name: blog-web
@@ -87,7 +91,7 @@ services:
       - blog-redis
       - blog-mysql
     ports:
-      - 8443:8443
+      - ${ONEBLOG_EXPORT_PORT_WEB}:8080
     networks:
       - oneblog
 

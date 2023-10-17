@@ -2,7 +2,6 @@
 package com.zyd.blog.business.vo;
 
 import com.zyd.blog.framework.object.BaseConditionVO;
-import com.zyd.blog.business.entity.BizAdBo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

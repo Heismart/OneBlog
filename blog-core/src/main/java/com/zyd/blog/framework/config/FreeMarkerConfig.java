@@ -6,6 +6,7 @@ import com.zyd.blog.framework.property.AppProperties;
 import com.zyd.blog.framework.tag.ArticleTags;
 import com.zyd.blog.framework.tag.CustomTags;
 import freemarker.template.TemplateModelException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,6 +21,7 @@ import javax.annotation.PostConstruct;
  * @since 1.0
  */
 @Configuration
+@Slf4j
 public class FreeMarkerConfig {
 
     @Autowired
@@ -46,7 +48,7 @@ public class FreeMarkerConfig {
             //shiro标签
             configuration.setSharedVariable("shiro", new ShiroTags());
         } catch (TemplateModelException e) {
-            e.printStackTrace();
+            log.error("FreeMarkerConfig 初始化Share Variable 失败!",e);
         }
     }
 }

@@ -55,7 +55,7 @@ public class RedisConfig extends CachingConfigurerSupport {
     public CacheManager cacheManager(RedisConnectionFactory factory) {
         return RedisCacheManager.builder(RedisCacheWriter.nonLockingRedisCacheWriter(factory))
                 // 默认缓存过期时间：天
-                .cacheDefaults(RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofDays(30)))
+                .cacheDefaults(RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofDays(7)))
                 .transactionAware()
                 .build();
     }

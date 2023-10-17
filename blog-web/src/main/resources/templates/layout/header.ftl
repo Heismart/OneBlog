@@ -35,7 +35,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <ul class="list-inline">
                     <li><h4 class="modal-title" id="oauthTitle">登录</h4></li>
-                    <li><a href="javascript:$.alert.info('没用，别点了！我就没打算开发这个功能。Just to show you~~~');"><h4 class="modal-title" id="myModalLabel">注册</h4></a></li>
+                    <li><a href="javascript:$.alert.info('暂不支持直接注册，请Follow登录提示，使用第三方登录方式完成注册');"><h4 class="modal-title" id="myModalLabel">注册</h4></a></li>
                 </ul>
             </div>
             <div class="modal-body">

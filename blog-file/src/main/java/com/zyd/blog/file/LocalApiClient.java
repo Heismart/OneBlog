@@ -1,9 +1,10 @@
 package com.zyd.blog.file;
 
+import cn.hutool.core.io.FileUtil;
 import com.zyd.blog.file.entity.VirtualFile;
 import com.zyd.blog.file.exception.LocalApiException;
-import com.zyd.blog.file.util.FileUtil;
-import com.zyd.blog.file.util.StreamUtil;
+import com.zyd.blog.file.util.BlogFileUtil;
+import com.zyd.blog.file.util.BlogStreamUtil;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
@@ -12,6 +13,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
 import java.util.Date;
 
 /**
@@ -36,7 +39,7 @@ public class LocalApiClient extends BaseApiClient {
         this.url = url;
         this.rootPath = rootPath;
 
-        this.pathPrefix = StringUtils.isEmpty(uploadType) ? DEFAULT_PREFIX : uploadType.endsWith("/") ? uploadType : uploadType + "/";
+        this.pathPrefix = StringUtils.isEmpty(uploadType) ? DEFAULT_PREFIX : uploadType.endsWith(File.separator) ? uploadType : uploadType + File.separator;
         return this;
     }
 
@@ -44,14 +47,14 @@ public class LocalApiClient extends BaseApiClient {
     public VirtualFile uploadImg(InputStream is, String imageUrl) {
         this.check();
 
-        String key = FileUtil.generateTempFileName(imageUrl);
+        String key = BlogFileUtil.generateTempFileName(imageUrl);
         this.createNewFileName(key, this.pathPrefix);
         Date startTime = new Date();
 
         String realFilePath = this.rootPath + this.newFileName;
-        FileUtil.checkFilePath(realFilePath);
-        try (InputStream uploadIs = StreamUtil.clone(is);
-             InputStream fileHashIs = StreamUtil.clone(is);
+        BlogFileUtil.checkFilePath(realFilePath);
+        try (InputStream uploadIs = BlogStreamUtil.clone(is);
+             InputStream fileHashIs = BlogStreamUtil.clone(is);
              FileOutputStream fos = new FileOutputStream(realFilePath)) {
             FileCopyUtils.copy(uploadIs, fos);
             return new VirtualFile()
@@ -62,6 +65,7 @@ public class LocalApiClient extends BaseApiClient {
                     .setFilePath(this.newFileName)
                     .setFileHash(DigestUtils.md5DigestAsHex(fileHashIs))
                     .setFullFilePath(this.url + this.newFileName);
+
         } catch (Exception e) {
             throw new LocalApiException("[" + this.storageType + "]文件上传失败：" + e.getMessage() + imageUrl);
         } finally {
@@ -81,14 +85,16 @@ public class LocalApiClient extends BaseApiClient {
         if (StringUtils.isEmpty(key)) {
             throw new LocalApiException("[" + this.storageType + "]删除文件失败：文件key为空");
         }
+
         File file = new File(this.rootPath + key);
-        if (!file.exists()) {
-            throw new LocalApiException("[" + this.storageType + "]删除文件失败：文件不存在[" + this.rootPath + key + "]");
-        }
         try {
-            return file.delete();
-        } catch (Exception e) {
-            throw new LocalApiException("[" + this.storageType + "]删除文件失败：" + e.getMessage());
+            return Files.deleteIfExists(file.toPath());
+        }catch (DirectoryNotEmptyException e){
+            throw new LocalApiException("[" + this.storageType + "]删除文件夹失败：先清空文件夹下的文件及子文件夹[" + this.rootPath + key + "]");
+        }catch (SecurityException e){
+            throw new LocalApiException("[" + this.storageType + "]没有足够的权限删除文件：" + e.getMessage());
+        }catch (IOException e){
+            throw new LocalApiException("[" + this.storageType + "]删除文件失败：文件不存在[" + this.rootPath + key + "]");
         }
     }
 

@@ -147,7 +147,7 @@ public class SysLinkServiceImpl implements SysLinkService {
         if (bo != null) {
             throw new ZhydLinkException("本站已经添加过贵站的链接！");
         }
-        Map config = configService.getConfigs();
+        Map<String,Object> config = configService.getConfigs();
         String domain = (String) config.get(ConfigKeyEnum.DOMAIN.getKey());
         if (!(LinksUtil.hasLinkByHtml(url, domain))
                 && !LinksUtil.hasLinkByChinaz(url, domain)) {

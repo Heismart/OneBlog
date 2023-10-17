@@ -5,8 +5,8 @@ import com.zyd.blog.file.entity.VirtualFile;
 import com.zyd.blog.file.exception.GlobalFileException;
 import com.zyd.blog.file.exception.OssApiException;
 import com.zyd.blog.file.exception.QiniuApiException;
-import com.zyd.blog.file.util.FileUtil;
-import com.zyd.blog.file.util.ImageUtil;
+import com.zyd.blog.file.util.BlogFileUtil;
+import com.zyd.blog.file.util.BlogImageUtil;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -25,7 +25,7 @@ public abstract class BaseApiClient implements ApiClient {
     protected String newFileName;
     protected String suffix;
 
-    public BaseApiClient(String storageType) {
+    protected BaseApiClient(String storageType) {
         this.storageType = storageType;
     }
 
@@ -37,7 +37,7 @@ public abstract class BaseApiClient implements ApiClient {
         }
         try {
             VirtualFile res = this.uploadImg(file.getInputStream(), file.getOriginalFilename());
-            VirtualFile imageInfo = ImageUtil.getInfo(file);
+            VirtualFile imageInfo = BlogImageUtil.getInfo(file);
             return res.setSize(imageInfo.getSize())
                     .setOriginalFileName(file.getOriginalFilename())
                     .setWidth(imageInfo.getWidth())
@@ -55,8 +55,8 @@ public abstract class BaseApiClient implements ApiClient {
         }
         try {
             InputStream is = new BufferedInputStream(new FileInputStream(file));
-            VirtualFile res = this.uploadImg(is, "temp" + FileUtil.getSuffix(file));
-            VirtualFile imageInfo = ImageUtil.getInfo(file);
+            VirtualFile res = this.uploadImg(is, "temp" + BlogFileUtil.getSuffix(file));
+            VirtualFile imageInfo = BlogImageUtil.getInfo(file);
             return res.setSize(imageInfo.getSize())
                     .setOriginalFileName(file.getName())
                     .setWidth(imageInfo.getWidth())
@@ -67,8 +67,8 @@ public abstract class BaseApiClient implements ApiClient {
     }
 
     void createNewFileName(String key, String pathPrefix) {
-        this.suffix = FileUtil.getSuffix(key);
-        if (!FileUtil.isPicture(this.suffix)) {
+        this.suffix = BlogFileUtil.getSuffix(key);
+        if (!BlogFileUtil.isPicture(this.suffix)) {
             throw new GlobalFileException("[" + this.storageType + "] 非法的图片文件[" + key + "]！目前只支持以下图片格式：[jpg, jpeg, png, gif, bmp]");
         }
         String fileName = DateUtil.format(new Date(), "yyyyMMddHHmmssSSS");

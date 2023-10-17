@@ -4,14 +4,14 @@ import com.zyd.blog.business.enums.FileUploadType;
 import com.zyd.blog.file.FileUploader;
 import com.zyd.blog.file.entity.VirtualFile;
 import com.zyd.blog.file.exception.GlobalFileException;
-import com.zyd.blog.file.util.FileUtil;
+import com.zyd.blog.file.util.BlogFileUtil;
 import com.zyd.blog.plugin.file.GlobalFileUploader;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.springframework.util.StringUtils;
 
 import java.io.*;
 import java.util.UUID;
@@ -30,7 +30,7 @@ public class ImageDownloadUtil {
         String res = null;
         try (InputStream is = getInputStreamByUrl(imgUrl, referer)) {
             FileUploader uploader = new GlobalFileUploader();
-            VirtualFile file = uploader.upload(is, FileUploadType.SIMPLE.getPath(), imgUrl, false);
+            VirtualFile file = uploader.upload(is, FileUploadType.ARTICLE.getPath(), imgUrl, false);
             res = file.getFullFilePath();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -49,7 +49,7 @@ public class ImageDownloadUtil {
     @Deprecated
     public static String download(String imgUrl, String referer, String localPath) {
 
-        String fileName = localPath + File.separator + UUID.randomUUID().toString() + FileUtil.getSuffixByUrl(imgUrl);
+        String fileName = localPath + File.separator + UUID.randomUUID().toString() + BlogFileUtil.getSuffixByUrl(imgUrl);
         try (InputStream is = getInputStreamByUrl(imgUrl, referer);
              FileOutputStream fos = new FileOutputStream(fileName)) {
             if (null == is) {
@@ -74,19 +74,19 @@ public class ImageDownloadUtil {
     private static InputStream getInputStreamByUrl(String url, String referer) {
         HttpGet httpGet = new HttpGet(checkUrl(url));
         httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36");
-        if (StringUtils.isNotEmpty(referer)) {
+        if(StringUtils.hasText(referer)){
             httpGet.setHeader("referer", referer);
         }
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        CloseableHttpResponse response = null;
+
         InputStream in = null;
-        try {
-            response = httpclient.execute(httpGet);
+        try (CloseableHttpClient httpclient = HttpClients.createDefault();
+             CloseableHttpResponse response  = httpclient.execute(httpGet)){
+
             in = response.getEntity().getContent();
             if (response.getStatusLine().getStatusCode() == 200) {
                 return in;
             } else {
-                log.error("Error. %s", parseInputStream(in));
+                log.error("Error.", parseInputStream(in));
                 return null;
             }
         } catch (IOException e) {
@@ -97,16 +97,27 @@ public class ImageDownloadUtil {
 
     private static String parseInputStream(InputStream in) throws IOException {
         String result = "";
-        StringBuffer content = null;
-        if (null != in) {
-            BufferedReader r = new BufferedReader(new InputStreamReader(in));
-            content = new StringBuffer();
+//        StringBuffer content = null;
+//        if (null != in) {
+//            BufferedReader r = new BufferedReader(new InputStreamReader(in));
+//            content = new StringBuffer();
+//            String line = "";
+//            while ((line = r.readLine()) != null) {
+//                content.append(line);
+//            }
+//            result = content.toString();
+//        }
+
+        try(InputStreamReader isr = new InputStreamReader(in);
+            BufferedReader r = new BufferedReader(isr)){
+            StringBuilder content = new StringBuilder();
             String line = "";
             while ((line = r.readLine()) != null) {
                 content.append(line);
             }
             result = content.toString();
         }
+
         return result;
     }
 

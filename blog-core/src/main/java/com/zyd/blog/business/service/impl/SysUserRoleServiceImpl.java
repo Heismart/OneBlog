@@ -2,10 +2,8 @@ package com.zyd.blog.business.service.impl;
 
 import com.zyd.blog.business.entity.UserRole;
 import com.zyd.blog.business.service.SysUserRoleService;
-import com.zyd.blog.framework.holder.RequestHolder;
 import com.zyd.blog.persistence.beans.SysUserRole;
 import com.zyd.blog.persistence.mapper.SysUserRoleMapper;
-import com.zyd.blog.util.IpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -83,11 +81,11 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
         if (CollectionUtils.isEmpty(sysUserRole)) {
             return null;
         }
-        List<UserRole> UserRole = new ArrayList<>();
+        List<UserRole> userRoleList = new ArrayList<>();
         for (SysUserRole r : sysUserRole) {
-            UserRole.add(new UserRole(r));
+            userRoleList.add(new UserRole(r));
         }
-        return UserRole;
+        return userRoleList;
     }
 
     /**

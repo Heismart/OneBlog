@@ -52,7 +52,12 @@ public class RestClientUtil {
      * @param params:
      *         default null
      */
-    public static String request(String method, String urlString, Map<String, Object> params, String encode, Map<String, String> requestHeader) {
+    public static String request(String method,
+                                 String urlString,
+                                 Map<String, Object> params,
+                                 String encode,
+                                 Map<String, String> requestHeader
+    ) {
         // 解决因jdk版本问题造成的SSL请求失败的问题
         java.lang.System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
         final HttpURLConnection connection;

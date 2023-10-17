@@ -17,7 +17,7 @@
                     </div>
                     <div class="clear"></div>
                     <ul class="list-unstyled list-inline search-hot">
-                        <li><strong style="position: relative;top: 2px;color: #999999;">热门搜索：</strong></li>
+                        <li><strong style="position: relative;top: 2px;color: #999999;">热门：</strong></li>
                         <@zhydTag method="searchOptions">
                             <#if searchOptions?? && (searchOptions?size > 0)>
                                 <#list searchOptions as item>
@@ -131,16 +131,10 @@
         <div class="container">
             <div class="row">
                 <div class="col col-xs-12 col-md-12 col-lg-12">
-                    <p><#if config.copyright!>${config.copyright} |</#if> Powered by <a href="https://gitee.com/yadong.zhang/DBlog" title="OneBlog是一款简洁美观、自适应的Java博客系统..." data-toggle="tooltip" data-placement="right" target="_blank" style="color: #4286ca;font-weight: 600;">OneBlog ${appInfo.version!}</a>  </p>
+                    <p><#if config.copyright!>${config.copyright} |</#if> Powered by <a href="http://www.igrok.cn" title="IGrok·Blog，一群资深项目管理者和开发者共聚在一起，专注于知识分享、升华、传承。以前端、后端、数据、容器计算等技术专题为内容组织主线，涵盖主流敏捷开发所需的主要基础知识讲解及应用实例示范，贯彻用实践驱动学习和成长，精准掌握知识关键，高效运用到实际工作中去。" data-toggle="tooltip" data-placement="right" target="_blank" style="color: #4286ca;font-weight: 600;">IGrok·Blog ${appInfo.version!}</a>  </p>
                     <#if url?? && (url == "index")>
                         <div class="inline external-links">
                             <a>友情链接：</a>
-                            <a href="https://justauth.wiki" target="_blank" title="开箱即用的整合第三方登录的开源组件" data-toggle="tooltip" data-placement="right">
-                                JustAuth
-                            </a>
-                            <a href="https://justauth.plus" target="_blank" title="一款开源的登录认证中间件，支持 Form、 OAuth2.0、OIDC、Http Basic、Digest、Bearer、LDAP、SAML、MFA、SSO 等" data-toggle="tooltip" data-placement="right">
-                                JAP
-                            </a>
                             <#if indexLinkList?? && (indexLinkList?size > 0)>
                                 <#list indexLinkList as item>
                                     <a href="${item.url}" target="_blank" title="${item.description!}" data-toggle="tooltip" data-placement="right">

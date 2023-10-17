@@ -66,7 +66,7 @@ public class BlogApplicationRunner extends ContextLoaderListener implements Appl
             log.info("  - password：{}", dataSourceProperties.getPassword());
 
             log.info("Redis：");
-            log.info("  - database：{}", redisProperties.getDatabase());
+//            log.info("  - database：{}", redisProperties.getDatabase());
             log.info("  - host：{}", redisProperties.getHost());
             log.info("  - port：{}", redisProperties.getPort());
             log.info("  - password：{}", redisProperties.getPassword());

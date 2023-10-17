@@ -1,7 +1,6 @@
 package com.zyd.blog.business.entity;
 
 import com.zyd.blog.persistence.beans.SysSocialConfig;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Date;
 
@@ -93,7 +92,7 @@ public class SocialConfig {
 	
 	public boolean isUnionId() {
 		Boolean value = this.sysSocialConfig.getUnionId();
-		return value != null ? value : false;
+		return value != null && value;
 	}
 
 	public void setUnionId(boolean unionId) {
@@ -126,7 +125,7 @@ public class SocialConfig {
 	
 	public boolean isAvailable() {
 		Boolean value = this.sysSocialConfig.getAvailable();
-		return value != null ? value : false;
+		return value != null && value;
 	}
 
 	public void setAvailable(boolean available) {
